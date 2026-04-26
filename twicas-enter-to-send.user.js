@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         ツイキャス コメント楽々送信
+// @name         キャスコメ楽々送信
 // @namespace    twicas-enter
 // @version      1.0
 // @description  Enterでコメント送信（Shift+Enterで改行）
