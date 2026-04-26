@@ -1,4 +1,4 @@
-# Twicas Enter to Send
+# キャスコメ楽々送信
 
 TwitCastingのコメント入力欄でEnterキーを押すとコメントを送信するユーザースクリプトです。
 
