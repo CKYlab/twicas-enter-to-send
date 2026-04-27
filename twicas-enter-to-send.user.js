@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name         キャスコメ楽々送信
-// @namespace    twicas-enter
-// @version      1.0
-// @description  Enterでコメント送信（Shift+Enterで改行）
+// @name         Twicas Enter to Send
+// @namespace    https://github.com/CKYlab/twicas-enter-to-send
+// @version      1.1.0
+// @description  TwitCastingでEnterキーによるコメント送信を有効にします。Shift+Enterで改行します。
 // @match        https://twitcasting.tv/*
-// @run-at       document-idle
 // @grant        none
+// @license      MIT
 // ==/UserScript==
 
 (function () {
@@ -36,6 +36,16 @@
       if (
         text === 'コメント' ||
         text === '匿名コメント' ||
+
+        text === 'Comment' ||
+        text === 'Comment anonymously' ||
+
+        text === '댓글' ||
+        text === '익명으로 댓글 달기' ||
+        
+        text === '留言' ||
+        text === '匿名留言' ||
+
         text.toLowerCase() === 'comment' ||
         text.toLowerCase() === 'send'
       ) {
