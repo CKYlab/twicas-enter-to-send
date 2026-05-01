@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Twicas Enter to Send
 // @namespace    https://github.com/CKYlab/twicas-enter-to-send
-// @version      1.1.2
+// @version      1.1.3
 // @description  TwitCastingでEnterキーによるコメント送信を有効にします。Shift+Enterで改行します。
 // @match        https://twitcasting.tv/*
 // @grant        none
