@@ -11,6 +11,27 @@
 (function () {
   'use strict';
 
+  const SEND_BUTTON_TEXT_KEYWORDS = [
+    'コメント',
+    '匿名コメント',
+    'comment',
+    'anonymously',
+    'send',
+    '댓글',
+    '익명',
+    '留言',
+    '匿名',
+  ];
+
+  const COMMENT_FIELD_HINT_KEYWORDS = [
+    'コメント',
+    'comment',
+    '댓글',
+    '留言',
+  ];
+
+  const COMMENT_FIELD_NAME_KEYWORDS = ['comment', 'message'];
+
   if (window.__twicasEnterInjected) return;
   window.__twicasEnterInjected = true;
 
@@ -24,36 +45,26 @@
     );
   }
 
-   function findSendButton(fromEl) {
-     const form = fromEl.closest('form') || document;
-     const buttons = Array.from(form.querySelectorAll('button, input[type="submit"]'));
+  function includesAny(text, keywords) {
+    return keywords.some((keyword) => text.includes(keyword));
+  }
 
-     for (const b of buttons) {
-       if (!isVisible(b)) continue;
+  function findSendButton(fromEl) {
+    const form = fromEl.closest('form') || document;
+    const buttons = Array.from(form.querySelectorAll('button, input[type="submit"]'));
 
-       const text = (b.innerText || b.value || b.getAttribute('aria-label') || '').trim();
-       const lower = text.toLowerCase();
+    for (const b of buttons) {
+      if (!isVisible(b)) continue;
 
-       if (
-         text.includes('コメント') ||
-         text.includes('匿名コメント') ||
+      const text = (b.innerText || b.value || b.getAttribute('aria-label') || '').trim();
+      const lower = text.toLowerCase();
+      if (includesAny(text, SEND_BUTTON_TEXT_KEYWORDS) || includesAny(lower, SEND_BUTTON_TEXT_KEYWORDS)) {
+        return b;
+      }
+    }
 
-          lower.includes('comment') ||
-          lower.includes('anonymously') ||
-         lower.includes('send') ||
-
-         text.includes('댓글') ||
-         text.includes('익명') ||
-
-         text.includes('留言') ||
-         text.includes('匿名')
-       ) {
-         return b;
-       }
-     }
-
-     return null;
- }
+    return null;
+  }
 
   function attach(el) {
     if (!el || el.__twicasEnterBound) return;
@@ -83,28 +94,20 @@
 
   function scan() {
     document.querySelectorAll('textarea, input[type="text"], [contenteditable="true"]').forEach((el) => {
-       const ph = (el.getAttribute('placeholder') || '').toLowerCase();
-       const name = (el.getAttribute('name') || '').toLowerCase();
-        const aria = (el.getAttribute('aria-label') || '').toLowerCase();
+      const placeholder = (el.getAttribute('placeholder') || '').toLowerCase();
+      const name = (el.getAttribute('name') || '').toLowerCase();
+      const ariaLabel = (el.getAttribute('aria-label') || '').toLowerCase();
 
-       if (
-          ph.includes('コメント') ||
-          ph.includes('comment') ||
-          ph.includes('댓글') ||
-          ph.includes('留言') ||
+      const matchesCommentHint =
+        includesAny(placeholder, COMMENT_FIELD_HINT_KEYWORDS) ||
+        includesAny(ariaLabel, COMMENT_FIELD_HINT_KEYWORDS);
+      const matchesFieldName = includesAny(name, COMMENT_FIELD_NAME_KEYWORDS);
 
-          name.includes('comment') ||
-          name.includes('message') ||
-
-          aria.includes('コメント') ||
-          aria.includes('comment') ||
-          aria.includes('댓글') ||
-          aria.includes('留言')
-        ) {
-          attach(el);
-        }
-      });
-    }
+      if (matchesCommentHint || matchesFieldName) {
+        attach(el);
+      }
+    });
+  }
 
   scan();
 
